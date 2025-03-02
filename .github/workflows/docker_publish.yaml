@@ -28,55 +28,107 @@ jobs:
 
       - name: Install cosign
         if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # v3.8.1
+        uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a
         with:
           cosign-release: 'v2.2.4'
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+        uses: docker/setup-buildx-action@v3.10.0
 
-      - name: Log into registry ${{ env.REGISTRY }}
+      - name: Log into registry
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
+      # Build BPMN Assistant
+      - name: Extract Docker metadata (BPMN Assistant)
+        id: meta-assistant
+        uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bpmn-assistant
 
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
+      - name: Build and push Docker image (BPMN Assistant)
+        id: build-and-push-assistant
+        uses: docker/build-push-action@v6.15.0
         with:
-          context: .
+          context: ./src/bpmn-assistant
+          file: ./src/bpmn-assistant/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: |
-             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-             org.opencontainers.image.revision=${{ github.sha }}
-             org.opencontainers.image.description=SolarEdge GraphQL Mesh Playground
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ steps.meta-assistant.outputs.tags }}
           platforms: linux/amd64,linux/arm64
-          
-      - name: Scan Docker image with Trivy
+
+      - name: Scan Docker image (BPMN Assistant)
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          # 
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bpmn-assistant:main
           format: 'table'
           exit-code: '0'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
-      - name: Sign the published Docker image
+      # Build BPMN Frontend
+      - name: Extract Docker metadata (BPMN Frontend)
+        id: meta-frontend
+        uses: docker/metadata-action@v5.7.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bpmn-frontend
+
+      - name: Build and push Docker image (BPMN Frontend)
+        id: build-and-push-frontend
+        uses: docker/build-push-action@v6.15.0
+        with:
+          context: ./src/bpmn-frontend
+          file: ./src/bpmn-frontend/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          platforms: linux/amd64,linux/arm64
+
+      - name: Scan Docker image (BPMN Frontend)
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bpmn-frontend:main
+          format: 'table'
+          exit-code: '0'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+
+      # Build BPMN Layout Server
+      - name: Extract Docker metadata (BPMN Layout Server)
+        id: meta-layout
+        uses: docker/metadata-action@v5.7.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bpmn-layout-server
+
+      - name: Build and push Docker image (BPMN Layout Server)
+        id: build-and-push-layout
+        uses: docker/build-push-action@v6.15.0
+        with:
+          context: ./src/bpmn-layout-server
+          file: ./src/bpmn-layout-server/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta-layout.outputs.tags }}
+          platforms: linux/amd64,linux/arm64
+
+      - name: Scan Docker image (BPMN Layout Server)
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bpmn-layout-server:main
+          format: 'table'
+          exit-code: '0'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+
+      # Sign Docker images
+      - name: Sign Docker images
         if: ${{ github.event_name != 'pull_request' }}
         env:
-          TAGS: ${{ steps.meta.outputs.tags }}
-          DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+          TAGS_ASSISTANT: ${{ steps.meta-assistant.outputs.tags }}
+          DIGEST_ASSISTANT: ${{ steps.build-and-push-assistant.outputs.digest }}
+          TAGS_FRONTEND: ${{ steps.meta-frontend.outputs.tags }}
+          DIGEST_FRONTEND: ${{ steps.build-and-push-frontend.outputs.digest }}
+          TAGS_LAYOUT: ${{ steps.meta-layout.outputs.tags }}
+          DIGEST_LAYOUT: ${{ steps.build-and-push-layout.outputs.digest }}
+        run: |
+          echo "${TAGS_ASSISTANT}" | xargs -I {} cosign sign --yes {}@${DIGEST_ASSISTANT}
+          echo "${TAGS_FRONTEND}" | xargs -I {} cosign sign --yes {}@${DIGEST_FRONTEND}
+          echo "${TAGS_LAYOUT}" | xargs -I {} cosign sign --yes {}@${DIGEST_LAYOUT}
