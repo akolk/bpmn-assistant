@@ -63,7 +63,7 @@ jobs:
       - name: Scan Docker image (BPMN Assistant)
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: ${{ env.REGISTRY }}/bpmn-assistant:main
+          image-ref: ${{ env.REGISTRY }}/akolk/bpmn-assistant:main
           format: 'table'
           exit-code: '0'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
@@ -88,7 +88,7 @@ jobs:
       - name: Scan Docker image (BPMN Frontend)
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: ${{ env.REGISTRY }}/bpmn-frontend:main
+          image-ref: ${{ env.REGISTRY }}/akolk/bpmn-frontend:main
           format: 'table'
           exit-code: '0'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
@@ -113,7 +113,7 @@ jobs:
       - name: Scan Docker image (BPMN Layout Server)
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: ${{ env.REGISTRY }}/bpmn-layout-server:main
+          image-ref: ${{ env.REGISTRY }}/akolk/bpmn-layout-server:main
           format: 'table'
           exit-code: '0'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
