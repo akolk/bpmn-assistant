@@ -48,7 +48,7 @@ jobs:
         id: meta-assistant
         uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.REGISTRY }}/bpmn-assistant
+          images: ${{ env.REGISTRY }}/akolk/bpmn-assistant
 
       - name: Build and push Docker image (BPMN Assistant)
         id: build-and-push-assistant
@@ -73,7 +73,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.REGISTRY }}/bpmn-frontend
+          images: ${{ env.REGISTRY }}/akolk/bpmn-frontend
 
       - name: Build and push Docker image (BPMN Frontend)
         id: build-and-push-frontend
@@ -98,7 +98,7 @@ jobs:
         id: meta-layout
         uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.REGISTRY }}/bpmn-layout-server
+          images: ${{ env.REGISTRY }}/akolk/bpmn-layout-server
 
       - name: Build and push Docker image (BPMN Layout Server)
         id: build-and-push-layout
