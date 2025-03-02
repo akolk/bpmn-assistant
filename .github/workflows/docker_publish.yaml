@@ -54,7 +54,7 @@ jobs:
         id: build-and-push-assistant
         uses: docker/build-push-action@v6.15.0
         with:
-          context: ./src/bpmn-assistant
+          context: ./src/bpmn_assistant
           file: ./src/bpmn-assistant/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-assistant.outputs.tags }}
@@ -80,7 +80,7 @@ jobs:
         uses: docker/build-push-action@v6.15.0
         with:
           context: ./src/bpmn-frontend
-          file: ./src/bpmn-frontend/Dockerfile
+          file: ./src/bpmn_frontend/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-frontend.outputs.tags }}
           platforms: linux/amd64,linux/arm64
@@ -104,7 +104,7 @@ jobs:
         id: build-and-push-layout
         uses: docker/build-push-action@v6.15.0
         with:
-          context: ./src/bpmn-layout-server
+          context: ./src/bpmn_layout_server
           file: ./src/bpmn-layout-server/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-layout.outputs.tags }}
