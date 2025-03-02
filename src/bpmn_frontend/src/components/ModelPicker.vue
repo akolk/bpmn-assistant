@@ -19,7 +19,7 @@ const Models = Object.freeze({
   GPT_4O: 'gpt-4o',
   O3_MINI: 'o3-mini',
   HAIKU_3_5: 'claude-3-5-haiku-20241022',
-  SONNET_3_5: 'claude-3-5-sonnet-20241022',
+  SONNET_3_7: 'claude-3-7-sonnet-20250219',
   GEMINI_2_PRO: 'gemini/gemini-2.0-pro-exp-02-05',
   GEMINI_2_FLASH: 'gemini/gemini-2.0-flash-001',
   LLAMA_3_3_70B:
@@ -59,8 +59,8 @@ export default {
           provider: Providers.ANTHROPIC,
         },
         {
-          value: Models.SONNET_3_5,
-          title: 'Claude 3.5 Sonnet',
+          value: Models.SONNET_3_7,
+          title: 'Claude 3.7 Sonnet',
           provider: Providers.ANTHROPIC,
         },
         {
@@ -132,9 +132,9 @@ export default {
         if (this.availableProviders.includes(Providers.OPENAI)) {
           this.onModelChange(Models.GPT_4O);
         } else if (this.availableProviders.includes(Providers.ANTHROPIC)) {
-          this.onModelChange(Models.SONNET_3_5);
+          this.onModelChange(Models.SONNET_3_7);
         } else if (this.availableProviders.includes(Providers.GOOGLE)) {
-          this.onModelChange(Models.GEMINI_1_5_PRO);
+          this.onModelChange(Models.GEMINI_2_PRO);
         } else if (this.availableProviders.includes(Providers.FIREWORKS_AI)) {
           this.onModelChange(Models.LLAMA_3_3_70B);
         }

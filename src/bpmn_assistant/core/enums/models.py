@@ -9,7 +9,7 @@ class OpenAIModels(Enum):
 
 class AnthropicModels(Enum):
     HAIKU_3_5 = "claude-3-5-haiku-20241022"
-    SONNET_3_5 = "claude-3-5-sonnet-20241022"
+    SONNET_3_7 = "claude-3-7-sonnet-20250219"
 
 
 class GoogleModels(Enum):
