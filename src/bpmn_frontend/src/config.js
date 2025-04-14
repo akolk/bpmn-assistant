@@ -1,2 +1,2 @@
-export const bpmnAssistantUrl = 'http://localhost:8000';
-export const bpmnLayoutServerUrl = 'http://localhost:3001';
+export const bpmnAssistantUrl = 'http://bpm-assistant.internal.anjokolk.com';
+export const bpmnLayoutServerUrl = 'http://bpm-layout.internal.anjokolk.com';
