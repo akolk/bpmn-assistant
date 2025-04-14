@@ -8,7 +8,11 @@ from pydantic import BaseModel
 
 from bpmn_assistant.config import logger
 from bpmn_assistant.core.enums.message_roles import MessageRole
-from bpmn_assistant.core.enums.models import FireworksAIModels, GoogleModels, OpenAIModels
+from bpmn_assistant.core.enums.models import (
+    FireworksAIModels,
+    GoogleModels,
+    OpenAIModels,
+)
 from bpmn_assistant.core.enums.output_modes import OutputMode
 from bpmn_assistant.core.llm_provider import LLMProvider
 
@@ -37,7 +41,9 @@ class LiteLLMProvider(LLMProvider):
         }
 
         # Google's structured output does not support type unions
-        if structured_output is not None and model not in [m.value for m in GoogleModels]:
+        if structured_output is not None and model not in [
+            m.value for m in GoogleModels
+        ]:
             params["response_format"] = structured_output
         elif self.output_mode == OutputMode.JSON:
             params["response_format"] = {"type": "json_object"}
@@ -47,6 +53,10 @@ class LiteLLMProvider(LLMProvider):
             params["temperature"] = temperature
 
         response = completion(**params)
+
+        if not response.choices:
+            logger.error(f"Emtpy response from model: {response.choices}")
+            raise Exception("Empty response from model")
 
         raw_output = response.choices[0].message.content
 
@@ -104,7 +114,11 @@ class LiteLLMProvider(LLMProvider):
         messages.append({"role": message_role, "content": content})
 
     def check_model_compatibility(self, model: str) -> bool:
-        return model in [m.value for m in FireworksAIModels] or model in [m.value for m in OpenAIModels] or model in [m.value for m in GoogleModels]
+        return (
+            model in [m.value for m in FireworksAIModels]
+            or model in [m.value for m in OpenAIModels]
+            or model in [m.value for m in GoogleModels]
+        )
 
     def _process_response(self, raw_output: str) -> str | dict[str, Any]:
         """
@@ -117,9 +131,7 @@ class LiteLLMProvider(LLMProvider):
                 result = json.loads(raw_output)
 
                 if not isinstance(result, dict):
-                    raise ValueError(
-                        f"Invalid JSON response from LLM: {result}"
-                    )
+                    raise ValueError(f"Invalid JSON response from LLM: {result}")
 
                 return result
             except json.decoder.JSONDecodeError as e:

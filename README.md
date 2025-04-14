@@ -82,12 +82,12 @@ Note: You can use any combination of the API keys above, but at least one is req
 ### Google
 
 * Gemini 2.0 Flash
-* Gemini 2.0 Pro
+* Gemini 2.5 Pro
 
 ### Fireworks AI
 
-* Llama 3.3 70B Instruct
-* Qwen 2.5 72B Instruct
+* Llama 4 Maverick
+* Qwen 2.5 72B
 * Deepseek V3
 * Deepseek R1
 
