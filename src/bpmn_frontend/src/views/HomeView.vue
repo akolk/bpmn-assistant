@@ -102,7 +102,7 @@ export default {
     },
     async createBpmnJson() {
       try {
-        const response = await fetch('http://localhost:8000/bpmn_to_json', {
+        const response = await fetch('http://bpm-assistant.internal.anjokolk.com/bpmn_to_json', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ bpmn_xml: this.bpmnXml }),
@@ -160,7 +160,7 @@ export default {
     },
     async processDiagram(bpmnDiagram) {
       try {
-        const response = await fetch('http://localhost:3001/process-bpmn', {
+        const response = await fetch('http://bpm-layout.internal.anjokolk.com/process-bpmn', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
