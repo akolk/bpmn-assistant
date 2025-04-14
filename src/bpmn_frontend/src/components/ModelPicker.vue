@@ -112,7 +112,7 @@ export default {
     async fetchAvailableProviders() {
       try {
         const response = await fetch(
-          'http://localhost:8000/available_providers',
+          'http://bpm-assistant.internal.anjokolk.com/available_providers',
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
