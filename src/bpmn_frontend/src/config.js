@@ -1,2 +1,2 @@
-export const bpmnAssistantUrl = 'http://bpm-assistant.internal.anjokolk.com';
-export const bpmnLayoutServerUrl = 'http://bpm-layout.internal.anjokolk.com';
+export const bpmnAssistantUrl = 'https://bpm-assistant.cloud.anjokolk.com';
+export const bpmnLayoutServerUrl = 'https://bpm-layout.cloud.anjokolk.com';
