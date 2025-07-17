@@ -1,12 +1,12 @@
 import json
-from typing import Generator, Any
+from typing import Any, Generator
 
 from anthropic import Anthropic
 from anthropic.types import TextBlock
 from pydantic import BaseModel
 
 from bpmn_assistant.config import logger
-from bpmn_assistant.core.enums import AnthropicModels, OutputMode, MessageRole
+from bpmn_assistant.core.enums import AnthropicModels, OutputMode
 from bpmn_assistant.core.llm_provider import LLMProvider
 
 
@@ -18,7 +18,6 @@ class AnthropicProvider(LLMProvider):
     def call(
         self,
         model: str,
-        prompt: str,
         messages: list[dict[str, str]],
         max_tokens: int,
         temperature: float,
@@ -27,8 +26,6 @@ class AnthropicProvider(LLMProvider):
         """
         Implementation of the Anthropic API call.
         """
-        messages.append({"role": "user", "content": prompt})
-
         if self.output_mode == OutputMode.JSON:
             # We add "{" to constrain the model to output a JSON object
             messages.append({"role": "assistant", "content": "{"})
@@ -75,7 +72,6 @@ class AnthropicProvider(LLMProvider):
     def stream(
         self,
         model: str,
-        prompt: str,
         messages: list[dict[str, str]],
         max_tokens: int,
         temperature: float,
@@ -83,8 +79,6 @@ class AnthropicProvider(LLMProvider):
         """
         Implementation of the Anthropic API stream.
         """
-        messages.append({"role": "user", "content": prompt})
-
         response = self.client.messages.stream(
             model=model,
             max_tokens=max_tokens,
@@ -98,12 +92,6 @@ class AnthropicProvider(LLMProvider):
 
     def get_initial_messages(self) -> list[dict[str, str]]:
         return []
-
-    def add_message(
-        self, messages: list[dict[str, str]], role: MessageRole, content: str
-    ) -> None:
-        message_role = "assistant" if role == MessageRole.ASSISTANT else "user"
-        messages.append({"role": message_role, "content": content})
 
     def check_model_compatibility(self, model: str) -> bool:
         return model in [m.value for m in AnthropicModels]

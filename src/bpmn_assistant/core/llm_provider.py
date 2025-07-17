@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Generator, Any
-from pydantic import BaseModel
+from typing import Any, Generator
 
-from bpmn_assistant.core.enums import MessageRole
+from pydantic import BaseModel
 
 
 class LLMProvider(ABC):
@@ -10,7 +9,6 @@ class LLMProvider(ABC):
     def call(
         self,
         model: str,
-        prompt: str,
         messages: list[dict[str, str]],
         max_tokens: int,
         temperature: float,
@@ -22,7 +20,6 @@ class LLMProvider(ABC):
     def stream(
         self,
         model: str,
-        prompt: str,
         messages: list[dict[str, str]],
         max_tokens: int,
         temperature: float,
@@ -31,12 +28,6 @@ class LLMProvider(ABC):
 
     @abstractmethod
     def get_initial_messages(self) -> list[dict[str, str]]:
-        pass
-
-    @abstractmethod
-    def add_message(
-        self, messages: list[dict[str, str]], role: MessageRole, content: str
-    ) -> None:
         pass
 
     @abstractmethod

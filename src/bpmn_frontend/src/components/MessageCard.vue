@@ -1,15 +1,14 @@
 <template>
-  <div class="mb-3 mx-2">
-    <v-card
-      :style="{ backgroundColor: getBackgroundColor() }"
-      class="text-black"
-    >
-      <v-card-subtitle class="mt-2"
-        ><b>{{ roleDisplay }}</b></v-card-subtitle
-      >
-      <v-card-text class="card-text" v-html="formattedContent"></v-card-text>
-    </v-card>
-  </div>
+  <transition name="fade" appear>
+    <div class="message-container" :class="`message-${role}`">
+      <div class="message-bubble">
+        <div class="message-role">
+          <b>{{ roleDisplay }}</b>
+        </div>
+        <div class="message-content" v-html="formattedContent"></div>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -29,18 +28,92 @@ export default {
         .replace(/\n/g, '<br>');
     },
   },
-  methods: {
-    getBackgroundColor() {
-      return this.role === 'user'
-        ? 'rgba(0, 100, 255, 0.1)'
-        : 'rgba(255, 0, 0, 0.1)';
-    },
-  },
 };
 </script>
 
 <style scoped>
-.card-text {
-  padding: 5px 15px 10px;
+.fade-enter-active {
+  transition: opacity 0.5s ease-out;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-enter-active {
+  transition: opacity 0.5s ease-out, transform 0.3s ease-out;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.fade-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.message-container {
+  display: flex;
+  margin-bottom: 12px;
+  max-width: 85%;
+}
+
+.message-user {
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.message-assistant {
+  justify-content: flex-start;
+  margin-left: 8px;
+  margin-right: auto;
+}
+
+.message-bubble {
+  padding: 10px 15px;
+  border-radius: 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  position: relative;
+}
+
+.message-user .message-bubble {
+  background-color: #e1f5fe;
+  color: #333;
+  border-bottom-right-radius: 4px;
+}
+
+.message-assistant .message-bubble {
+  background-color: #f1f1f1;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+.message-role {
+  font-size: 0.8em;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.message-content {
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+.message-content ::v-deep(strong) {
+  font-weight: bold;
+}
+
+.message-content ::v-deep(br) {
+  content: '';
+  display: block;
+  margin-bottom: 0.2em;
 }
 </style>

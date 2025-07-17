@@ -1,3 +1,4 @@
+import pytest
 from bpmn_assistant.services import BpmnJsonGenerator
 
 
@@ -748,3 +749,9 @@ class TestBpmnJsonGenerator:
         ]
 
         assert result == expected
+
+    def test_create_bpmn_json_multiple_start_events(self, bpmn_xml_two_start_events):
+        bpmn_json_generator = BpmnJsonGenerator()
+        with pytest.raises(ValueError, match="Process must contain exactly one start event"):
+            bpmn_json_generator.create_bpmn_json(bpmn_xml_two_start_events)
+

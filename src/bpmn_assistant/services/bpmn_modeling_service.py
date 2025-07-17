@@ -47,7 +47,7 @@ class BpmnModelingService:
         while attempts < max_retries:
             attempts += 1
             try:
-                response = llm_facade.call(prompt)
+                response = llm_facade.call(prompt, max_tokens=3000)
                 process = response["process"]
                 validate_bpmn(process)
                 logger.debug(

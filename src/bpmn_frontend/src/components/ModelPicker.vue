@@ -15,16 +15,16 @@
 
 <script>
 const Models = Object.freeze({
-  GPT_4O_MINI: 'gpt-4o-mini',
-  GPT_4O: 'gpt-4o',
-  O3_MINI: 'o3-mini',
-  HAIKU_3_5: 'claude-3-5-haiku-20241022',
-  SONNET_3_7: 'claude-3-7-sonnet-20250219',
+  GPT_4_1_MINI: 'gpt-4.1-mini',
+  GPT_4_1: 'gpt-4.1',
+  O4_MINI: 'o4-mini',
+  SONNET_4: 'claude-sonnet-4-20250514',
+  OPUS_4: 'claude-opus-4-20250514',
   GEMINI_2_5_PRO: 'gemini/gemini-2.5-pro-preview-03-25',
-  GEMINI_2_FLASH: 'gemini/gemini-2.0-flash-001',
+  GEMINI_2_5_FLASH: 'gemini/gemini-2.5-flash-preview-04-17',
   LLAMA_4_MAVERICK:
     'fireworks_ai/accounts/fireworks/models/llama4-maverick-instruct-basic',
-  QWEN_2_5_72B: 'fireworks_ai/accounts/fireworks/models/qwen2p5-72b-instruct',
+  QWEN_3_235B: 'fireworks_ai/accounts/fireworks/models/qwen3-235b-a22b',
   DEEPSEEK_V3: 'fireworks_ai/accounts/fireworks/models/deepseek-v3',
   DEEPSEEK_R1: 'fireworks_ai/accounts/fireworks/models/deepseek-r1',
 });
@@ -42,30 +42,30 @@ export default {
     return {
       selectedModel: '',
       models: [
+        { value: Models.GPT_4_1, title: 'GPT-4.1', provider: Providers.OPENAI },
         {
-          value: Models.GPT_4O_MINI,
-          title: 'GPT-4o mini',
-          provider: Providers.OPENAI,
-        },
-        { value: Models.GPT_4O, title: 'GPT-4o', provider: Providers.OPENAI },
-        {
-          value: Models.O3_MINI,
-          title: 'o3-mini',
+          value: Models.GPT_4_1_MINI,
+          title: 'GPT-4.1 mini',
           provider: Providers.OPENAI,
         },
         {
-          value: Models.HAIKU_3_5,
-          title: 'Claude 3.5 Haiku',
+          value: Models.O4_MINI,
+          title: 'o4-mini',
+          provider: Providers.OPENAI,
+        },
+        {
+          value: Models.SONNET_4,
+          title: 'Claude Sonnet 4',
           provider: Providers.ANTHROPIC,
         },
         {
-          value: Models.SONNET_3_7,
-          title: 'Claude 3.7 Sonnet',
+          value: Models.OPUS_4,
+          title: 'Claude Opus 4',
           provider: Providers.ANTHROPIC,
         },
         {
-          value: Models.GEMINI_2_FLASH,
-          title: 'Gemini 2.0 Flash',
+          value: Models.GEMINI_2_5_FLASH,
+          title: 'Gemini 2.5 Flash',
           provider: Providers.GOOGLE,
         },
         {
@@ -79,8 +79,8 @@ export default {
           provider: Providers.FIREWORKS_AI,
         },
         {
-          value: Models.QWEN_2_5_72B,
-          title: 'Qwen 2.5 72B',
+          value: Models.QWEN_3_235B,
+          title: 'Qwen 3',
           provider: Providers.FIREWORKS_AI,
         },
         {
@@ -130,9 +130,9 @@ export default {
         );
 
         if (this.availableProviders.includes(Providers.OPENAI)) {
-          this.onModelChange(Models.GPT_4O);
+          this.onModelChange(Models.GPT_4_1);
         } else if (this.availableProviders.includes(Providers.ANTHROPIC)) {
-          this.onModelChange(Models.SONNET_3_7);
+          this.onModelChange(Models.SONNET_4);
         } else if (this.availableProviders.includes(Providers.GOOGLE)) {
           this.onModelChange(Models.GEMINI_2_5_PRO);
         } else if (this.availableProviders.includes(Providers.FIREWORKS_AI)) {

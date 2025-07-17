@@ -12,14 +12,14 @@ from tests.fixtures.bpmn_loader import load_bpmn
 def anthropic_facade():
     load_dotenv(override=True)
     api_key = os.getenv("ANTHROPIC_API_KEY")
-    return LLMFacade(Provider.ANTHROPIC, api_key, AnthropicModels.HAIKU_3_5.value)
+    return LLMFacade(Provider.ANTHROPIC, api_key, AnthropicModels.SONNET_4.value)
 
 
 @pytest.fixture
 def openai_facade():
     load_dotenv(override=True)
     api_key = os.getenv("OPENAI_API_KEY")
-    return LLMFacade(Provider.OPENAI, api_key, OpenAIModels.GPT_4O_MINI.value)
+    return LLMFacade(Provider.OPENAI, api_key, OpenAIModels.GPT_4_1_MINI.value)
 
 
 @pytest.fixture
@@ -580,21 +580,9 @@ def labeled_events_process():
     Description: A process that contains events with labels.
     """
     return [
-        {
-            "type": "startEvent",
-            "id": "start1",
-            "label": "Order received"
-        },
-        {
-            "type": "task",
-            "id": "task1",
-            "label": "Process order"
-        },
-        {
-            "type": "endEvent",
-            "id": "end1",
-            "label": "Order completed"
-        }
+        {"type": "startEvent", "id": "start1", "label": "Order received"},
+        {"type": "task", "id": "task1", "label": "Process order"},
+        {"type": "endEvent", "id": "end1", "label": "Order completed"},
     ]
 
 
@@ -602,3 +590,9 @@ def labeled_events_process():
 def bpmn_xml_labeled_events():
     """Description: BPMN XML with labeled start and end events."""
     return load_bpmn("labeled_events.bpmn")
+
+@pytest.fixture
+def bpmn_xml_two_start_events():
+    """BPMN XML with two start events."""
+    return load_bpmn("two_start_events.bpmn")
+

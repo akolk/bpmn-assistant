@@ -33,6 +33,13 @@ class BpmnJsonGenerator:
         root = ET.fromstring(bpmn_xml)
         process_element = self._find_process_element(root)
         self._get_elements_and_flows(process_element)
+        start_events = [
+            elem
+            for elem in self.elements.values()
+            if elem["type"] == BPMNElementType.START_EVENT.value
+        ]
+        if len(start_events) != 1:
+            raise ValueError("Process must contain exactly one start event")
         self._build_process_structure()
         return self.process
 

@@ -26,6 +26,6 @@ def define_change_request(
         message_history=message_history_to_string(message_history),
     )
 
-    change_request = text_llm_facade.call(prompt, max_tokens=3000, temperature=0.4)
+    change_request = text_llm_facade.call(prompt, max_tokens=5000, temperature=0.4)
     logger.info(f"Change request: {change_request}")
     return change_request

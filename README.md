@@ -53,6 +53,8 @@ docker-compose up --build
 
 5. Open your browser and go to `http://localhost:8080`
 
+![Screenshot](images/screenshot_1.png)
+
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
@@ -69,33 +71,26 @@ Note: You can use any combination of the API keys above, but at least one is req
 
 ### OpenAI
 
-* GPT-4o mini
-* GPT-4o
-* o3-mini
-
+* GPT-4.1
+* GPT-4.1 mini
+* o4-mini
 
 ### Anthropic
 
-* Claude 3.5 Haiku
-* Claude 3.7 Sonnet
+* Claude Sonnet 4
+* Claude Opus 4
 
 ### Google
 
-* Gemini 2.0 Flash
+* Gemini 2.5 Flash
 * Gemini 2.5 Pro
 
 ### Fireworks AI
 
 * Llama 4 Maverick
-* Qwen 2.5 72B
+* Qwen 3 235B
 * Deepseek V3
 * Deepseek R1
-
-## Screenshots
-
-![Screenshot](images/screenshot_1.png)
-
-![Screenshot](images/screenshot_2.png)
 
 ## Core features
 
@@ -121,7 +116,7 @@ The application currently supports a subset of BPMN elements:
 
 * The AI assistant does not "see" manual edits made to the diagram. It always responds based on its last generated
   version. Keep this in mind when interacting with the assistant after making manual changes.
-* Pools and lanes are not and will not be supported.
+* Pools and lanes are not supported due to limitations in the [BPMN Auto Layout](https://github.com/bpmn-io/bpmn-auto-layout) library.
 
 ## Contact
 

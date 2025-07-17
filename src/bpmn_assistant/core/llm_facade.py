@@ -48,20 +48,21 @@ class LLMFacade:
         """
         logger.info(f"Calling LLM: {self.model}")
 
+        self.messages.append({"role": MessageRole.USER.value, "content": prompt})
+
         response = self.provider.call(
             self.model,
-            prompt,
             self.messages,
             max_tokens,
             temperature,
             structured_output,
         )
 
-        # Append the response to the message history in case the JSON is invalid and
-        # we need to re-run the call
         if self.output_mode == OutputMode.JSON:
-            self.provider.add_message(
-                self.messages, MessageRole.ASSISTANT, json.dumps(response)
+            if not isinstance(response, dict):
+                raise ValueError(f"Provider returned non-dict in JSON mode: {response}")
+            self.messages.append(
+                {"role": MessageRole.ASSISTANT.value, "content": json.dumps(response)}
             )
 
         return response
@@ -74,6 +75,6 @@ class LLMFacade:
         """
         logger.info(f"Calling LLM (streaming): {self.model}")
 
-        return self.provider.stream(
-            self.model, prompt, self.messages, max_tokens, temperature
-        )
+        self.messages.append({"role": MessageRole.USER.value, "content": prompt})
+
+        return self.provider.stream(self.model, self.messages, max_tokens, temperature)

@@ -74,7 +74,7 @@ class BpmnEditingService:
         self,
         updated_process: list,
         max_retries: int = 4,
-        max_num_of_iterations: int = 7,
+        max_num_of_iterations: int = 15,
     ) -> list:
         """
         Apply intermediate edits to the process.
